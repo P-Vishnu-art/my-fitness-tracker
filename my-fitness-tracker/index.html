@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="A simple 30-day home workout and consistency tracker.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>My Fitness Tracker</title>
+  <style>
+    :root{color-scheme:dark;--bg:#080d19;--panel:#111a2b;--panel2:#0d1525;--line:#23314a;--text:#f2f6ff;--muted:#96a7c1;--cyan:#5de1e6;--blue:#6d8cff;--green:#78e0b1;--orange:#ffc777;--danger:#ff9f9f;--radius:20px}
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at top right,#142441 0%,var(--bg) 42%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);line-height:1.45;min-height:100vh;padding:0 0 env(safe-area-inset-bottom)}button,input{font:inherit}button{cursor:pointer}
+    .app{width:min(100% - 28px,860px);margin:0 auto;padding:22px 0 38px}.top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(140deg,#5de1e6,#7288ff);color:#06121d;box-shadow:0 8px 28px #5de1e62a}.eyebrow{font-size:.72rem;color:var(--cyan);letter-spacing:.14em;text-transform:uppercase;font-weight:800}.brand h1{font-size:1.2rem;margin:2px 0 0;letter-spacing:-.03em}.install{border:1px solid #3c5971;color:var(--text);background:#142239;padding:10px 13px;border-radius:12px;font-weight:750;font-size:.85rem;white-space:nowrap}.install[hidden]{display:none}
+    .hero{padding:23px;border:1px solid #293a55;border-radius:25px;background:linear-gradient(130deg,#16263d,#10182a 72%);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:210px;height:210px;border:1px solid #5de1e61c;border-radius:50%;right:-65px;top:-75px;box-shadow:0 0 0 28px #5de1e60a,0 0 0 58px #5de1e607;pointer-events:none}.hero .eyebrow{position:relative;z-index:1}.hero h2{font-size:clamp(1.7rem,5.8vw,2.55rem);line-height:1.08;letter-spacing:-.055em;margin:10px 0 9px;max-width:520px;position:relative;z-index:1}.hero p{color:#aebed5;max-width:530px;margin:0;position:relative;z-index:1;font-size:.95rem}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;position:relative;z-index:1}.stat{padding:12px 13px;background:#0913227a;border:1px solid #2b3c54;border-radius:15px}.stat strong{display:block;font-size:1.4rem;line-height:1.15;letter-spacing:-.04em}.stat span{display:block;color:var(--muted);font-size:.72rem;margin-top:6px}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:25px 0 11px}.section-head h3{font-size:1.05rem;margin:0;letter-spacing:-.02em}.section-head p{font-size:.78rem;color:var(--muted);margin:3px 0 0}.date-controls{display:flex;align-items:center;gap:6px}.icon-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);width:34px;height:34px;border-radius:10px;font-size:1.15rem}.today-btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:10px;padding:7px 10px;font-size:.78rem;font-weight:700}
+    .week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.day-btn{border:1px solid var(--line);border-radius:14px;background:#0e1727;color:var(--muted);padding:10px 0 9px;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px}.day-btn .dow{font-size:.66rem;text-transform:uppercase;letter-spacing:.08em}.day-btn .num{font-weight:800;font-size:1rem;color:var(--text)}.day-btn .dot{width:5px;height:5px;border-radius:50%;background:#3c4a62}.day-btn.selected{border-color:var(--cyan);background:#14313a;box-shadow:inset 0 0 0 1px #5de1e633}.day-btn.selected .dow{color:var(--cyan)}.day-btn.done .dot{background:var(--green)}
+    .workout{margin-top:17px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(145deg,#121c2e,#0e1625);overflow:hidden}.workout-head{padding:19px 18px 16px;border-bottom:1px solid var(--line)}.tagrow{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:9px}.tag{font-size:.7rem;font-weight:800;padding:5px 8px;border-radius:7px;background:#19323a;color:var(--cyan);letter-spacing:.04em}.tag.muted{background:#202b40;color:#b6c3d9}.workout-head h3{font-size:1.35rem;letter-spacing:-.04em;margin:0 0 5px}.workout-head p{margin:0;color:var(--muted);font-size:.88rem}.progress-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;font-size:.78rem}.progress-row span{color:var(--muted)}.progress-track{height:7px;border-radius:50px;background:#26344a;overflow:hidden;margin-top:8px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:50px;transition:width .2s}
+    .task-list{padding:5px 14px 14px}.task{display:flex;align-items:flex-start;gap:12px;padding:13px 4px;border-bottom:1px solid #202c40}.task:last-child{border-bottom:0}.task input{appearance:none;-webkit-appearance:none;flex:0 0 22px;width:22px;height:22px;margin:1px 0 0;border:1.5px solid #52637d;border-radius:7px;background:#0b1422;display:grid;place-items:center}.task input:checked{background:var(--green);border-color:var(--green)}.task input:checked:after{content:"✓";font-size:15px;color:#062218;font-weight:900}.task .task-copy{flex:1;min-width:0}.task strong{font-size:.92rem;display:block;font-weight:750}.task small{font-size:.78rem;color:var(--muted);display:block;margin-top:3px}.task.completed strong{text-decoration:line-through;color:#91a4b8}.task.completed small{color:#72839b}
+    .tip{margin-top:14px;padding:13px 14px;border:1px solid #33435d;border-radius:14px;background:#101b2d;color:#b8c6db;font-size:.82rem}.tip strong{color:var(--text)}.habits{margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel2)}.habit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.habit{border:1px solid var(--line);border-radius:12px;padding:11px 9px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:#c3cee0;min-width:0}.habit input{accent-color:var(--green);width:16px;height:16px;flex:0 0 auto}.footer-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}.secondary{border:1px solid var(--line);border-radius:11px;padding:10px 12px;color:#c1cde0;background:#0d1625;font-size:.8rem;font-weight:700}.danger{color:#ffb4b4}.note{font-size:.76rem;color:var(--muted);text-align:center;margin:19px 4px 0}.empty{padding:16px;color:var(--muted);font-size:.86rem}
+    @media(min-width:650px){.app{padding-top:30px}.hero{padding:30px}.workout-head{padding:22px 23px 18px}.task-list{padding:7px 21px 17px}.task{padding:15px 3px}.habit-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:390px){.app{width:min(100% - 20px,860px);padding-top:14px}.hero{padding:18px}.stats{gap:6px}.stat{padding:10px 8px}.stat strong{font-size:1.25rem}.stat span{font-size:.66rem}.week{gap:4px}.day-btn{border-radius:11px}.day-btn .dow{font-size:.6rem}.habit-grid{grid-template-columns:1fr 1fr}.install{padding:9px 10px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M4 9v6M7 6v12M17 6v12M20 9v6M7 12h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div><div class="eyebrow">30-day consistency plan</div><h1>My Fitness Tracker</h1></div>
+      </div>
+      <button id="installBtn" class="install" hidden>＋ Install app</button>
+    </header>
+    <section class="hero">
+      <div class="eyebrow">One hour · 6:00–7:00 PM</div>
+      <h2>Show up. Check it off.<br>Get stronger.</h2>
+      <p>A simple home-workout tracker for chest, arms, core, full-body strength and cardio. Progress comes from consistency, not exhausting yourself.</p>
+      <div class="stats">
+        <div class="stat"><strong id="daysDone">0/7</strong><span>workouts this week</span></div>
+        <div class="stat"><strong id="taskCount">0%</strong><span>today's session</span></div>
+        <div class="stat"><strong id="journeyDay">Day 1/30</strong><span>your journey</span></div>
+      </div>
+    </section>
+    <div class="section-head">
+      <div><h3>Choose a day</h3><p id="monthLabel">Your weekly plan</p></div>
+      <div class="date-controls"><button class="icon-btn" id="prevWeek" aria-label="Previous week">‹</button><button class="today-btn" id="goToday">Today</button><button class="icon-btn" id="nextWeek" aria-label="Next week">›</button></div>
+    </div>
+    <nav id="weekStrip" class="week" aria-label="Days of the week"></nav>
+    <section class="workout" aria-live="polite">
+      <div class="workout-head">
+        <div class="tagrow"><span class="tag" id="focusTag">STRENGTH A</span><span class="tag muted">60 MINUTES</span></div>
+        <h3 id="workoutTitle">Chest, arms & core</h3>
+        <p id="workoutSubtitle">Slow, controlled reps. Good form first.</p>
+        <div class="progress-row"><strong>Session progress</strong><span id="progressText">0 of 0 tasks</span></div>
+        <div class="progress-track" role="progressbar" aria-label="Session progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="task-list" id="taskList"></div>
+    </section>
+    <section class="habits">
+      <div class="section-head" style="margin:0"><div><h3>Daily basics</h3><p>Small habits that support recovery</p></div></div>
+      <div class="habit-grid">
+        <label class="habit"><input type="checkbox" data-habit="water"> Drank water</label>
+        <label class="habit"><input type="checkbox" data-habit="meals"> Regular meals</label>
+        <label class="habit"><input type="checkbox" data-habit="sleep"> Enough sleep</label>
+      </div>
+      <div class="footer-actions"><button class="secondary" id="resetDay">Reset this day</button><button class="secondary" id="exportBtn">Export my progress</button></div>
+    </section>
+    <div class="tip"><strong>Remember:</strong> You don't need to push to exhaustion. Stop if you feel pain, dizziness or unusual discomfort. Visible changes in one month aren't guaranteed; track your strength and consistency too.</div>
+    <p class="note">Your checkmarks are saved in this browser on this device. They do not automatically sync between your laptop and phone.</p>
+  </main>
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const STORAGE_KEY = 'myFitnessTracker_v1';
+  const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const SHORT_DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const plans = {
+    1: {tag:'STRENGTH A', title:'Chest, arms & core', subtitle:'Monday · Controlled reps, good form first.', tasks:[
+      ['Warm-up','8 minutes','Marching, arm circles, gentle step jacks, squats and wall push-ups.'],
+      ['Incline push-ups','3 × 5–10 reps','Use a sturdy, non-slip counter or wall height that lets you keep good form.'],
+      ['Backpack rows','3 × 8–12 reps','Use a light, securely closed backpack; pull without jerking.'],
+      ['Water-bottle biceps curls','2 × 10–15 reps','Keep elbows by your sides; avoid swinging.'],
+      ['Close-grip wall push-ups','2 × 8–12 reps','Keep wrists comfortable and body aligned.'],
+      ['Dead bugs','2 × 8 per side','Move slowly and keep your lower back supported.'],
+      ['Forearm plank','2 × 20–35 seconds','Breathe normally; stop before your form breaks.'],
+      ['Cardio','18 minutes','Brisk walking, dancing, cycling or marching at a talkable pace.'],
+      ['Cool-down','7 minutes','Slow walk and gentle stretches.']
+    ]},
+    2: {tag:'CARDIO', title:'Walking & mobility', subtitle:'Tuesday · Moderate effort; you should still be able to talk.', tasks:[
+      ['Warm-up','8 minutes','Easy marching and gentle joint movements.'],
+      ['Brisk cardio','40 minutes','Walk briskly, dance or cycle. You can split this into shorter blocks if needed.'],
+      ['Mobility','5 minutes','Gentle shoulder, hip and ankle movements.'],
+      ['Cool-down','7 minutes','Slow down gradually and breathe comfortably.']
+    ]},
+    3: {tag:'STRENGTH B', title:'Full body & core', subtitle:'Wednesday · Build a balanced base.', tasks:[
+      ['Warm-up','8 minutes','Marching, arm circles, squats and easy wall push-ups.'],
+      ['Bodyweight squats','3 × 10–15 reps','Keep heels grounded and move within a comfortable range.'],
+      ['Glute bridges','3 × 10–15 reps','Lift hips smoothly; avoid arching your back.'],
+      ['Backpack rows','3 × 8–12 reps','Light backpack, steady torso and controlled pulls.'],
+      ['Incline push-ups','2 × 5–8 reps','Choose a height that keeps each rep controlled.'],
+      ['Bird dogs','2 × 8 per side','Extend opposite arm and leg without twisting.'],
+      ['Side plank from knees','2 × 15–25 sec per side','Keep hips lifted only as high as comfortable.'],
+      ['Cardio','18 minutes','Brisk walking, cycling, dancing or marching.'],
+      ['Cool-down','7 minutes','Easy walking and gentle stretches.']
+    ]},
+    4: {tag:'CARDIO INTERVALS', title:'Cardio & mobility', subtitle:'Thursday · Alternate brisk movement with an easier pace.', tasks:[
+      ['Warm-up','8 minutes','Start easy and gradually increase your pace.'],
+      ['Cardio intervals','30 minutes','5 min easy, then 10 rounds of 1 min brisk + 1 min easy, then 5 min easy.'],
+      ['Mobility','15 minutes','Gentle mobility for shoulders, hips, back and ankles.'],
+      ['Cool-down','7 minutes','Slow walking and comfortable breathing.']
+    ]},
+    5: {tag:'STRENGTH C', title:'Chest, arms & core', subtitle:'Friday · Repeat the basics and notice your technique.', tasks:[
+      ['Warm-up','8 minutes','Marching, arm circles, gentle step jacks, squats and wall push-ups.'],
+      ['Incline push-ups','3 × 5–10 reps','Lower with control; stop before form breaks down.'],
+      ['Backpack rows','3 × 8–12 reps','Use a light backpack and pull smoothly.'],
+      ['Water-bottle biceps curls','2 × 10–15 reps','Move slowly without swinging.'],
+      ['Close-grip wall push-ups','2 × 8–12 reps','Keep the movement comfortable.'],
+      ['Dead bugs','2 × 8 per side','Control the opposite arm and leg.'],
+      ['Side plank from knees','2 × 15–25 sec per side','Keep breathing throughout.'],
+      ['Cardio','18 minutes','Choose brisk walking, dancing, cycling or marching.'],
+      ['Cool-down','7 minutes','Walk slowly and stretch gently.']
+    ]},
+    6: {tag:'FUN FITNESS', title:'Move your way', subtitle:'Saturday · Choose an activity you enjoy.', tasks:[
+      ['Warm-up','8 minutes','Start with easy movement and dynamic mobility.'],
+      ['Fun cardio or sport','42 minutes','Choose sport, cycling, dancing or brisk walking; take breaks when needed.'],
+      ['Mobility','5 minutes','Gentle full-body movements.'],
+      ['Cool-down','5 minutes','Gradually slow down.']
+    ]},
+    0: {tag:'RECOVERY', title:'Easy movement & reset', subtitle:'Sunday · Keep it gentle; recovery is part of progress.', tasks:[
+      ['Easy warm-up','8 minutes','Gentle marching and comfortable mobility.'],
+      ['Relaxed walk','30 minutes','Walk at an easy pace and enjoy the break.'],
+      ['Stretch & mobility','15 minutes','Gentle, pain-free stretches; no bouncing or forcing positions.'],
+      ['Slow cool-down','7 minutes','Slow walk and relaxed breathing.']
+    ]}
+  };
+
+  const localDateKey = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const fromKey = (key) => { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d,12,0,0); };
+  const dateShift = (d,n) => { const copy = new Date(d); copy.setDate(copy.getDate()+n); return copy; };
+  const mondayOf = (d) => dateShift(d, -((d.getDay()+6)%7));
+  const fmtDate = (d, options={month:'short',day:'numeric'}) => d.toLocaleDateString(undefined,options);
+  const today = new Date(); today.setHours(12,0,0,0);
+  let selectedDate = new Date(today);
+  let state;
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { state = {}; }
+  if (!state.days) state.days = {};
+  if (!state.started) { state.started = localDateKey(today); persist(); }
+
+  function persist(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) { console.warn('Could not save progress',e); } }
+  function ensureDate(key){ if(!state.days[key]) state.days[key] = {checks:{},habits:{}}; if(!state.days[key].checks) state.days[key].checks={}; if(!state.days[key].habits) state.days[key].habits={}; return state.days[key]; }
+  function getPlan(date){ return plans[date.getDay()]; }
+  function renderWeek(){
+    const start = mondayOf(selectedDate); const end=dateShift(start,6);
+    $('monthLabel').textContent = `${fmtDate(start,{month:'short',day:'numeric'})} – ${fmtDate(end,{month:'short',day:'numeric',year:'numeric'})}`;
+    const strip=$('weekStrip'); strip.innerHTML='';
+    for(let i=0;i<7;i++){
+      const d=dateShift(start,i), key=localDateKey(d), day=ensureDate(key), plan=getPlan(d);
+      const doneCount=plan.tasks.filter((_,j)=>!!day.checks[j]).length; const isDone=doneCount===plan.tasks.length;
+      const b=document.createElement('button'); b.type='button'; b.className='day-btn'+(key===localDateKey(selectedDate)?' selected':'')+(isDone?' done':'');
+      b.setAttribute('aria-label',`${DAY_NAMES[d.getDay()]}, ${fmtDate(d,{month:'long',day:'numeric'})}${isDone?', session complete':''}`);
+      b.innerHTML=`<span class="dow">${SHORT_DAYS[d.getDay()]}</span><span class="num">${d.getDate()}</span><span class="dot" aria-hidden="true"></span>`;
+      b.addEventListener('click',()=>{selectedDate=d; renderAll();}); strip.appendChild(b);
+    }
+  }
+  function renderWorkout(){
+    const key=localDateKey(selectedDate), day=ensureDate(key), plan=getPlan(selectedDate);
+    $('focusTag').textContent=plan.tag; $('workoutTitle').textContent=plan.title; $('workoutSubtitle').textContent=plan.subtitle;
+    const list=$('taskList'); list.innerHTML='';
+    plan.tasks.forEach((task,i)=>{
+      const label=document.createElement('label'); label.className='task'+(day.checks[i]?' completed':'');
+      const input=document.createElement('input'); input.type='checkbox'; input.checked=!!day.checks[i]; input.setAttribute('aria-label',`Complete ${task[0]}`);
+      input.addEventListener('change',()=>{day.checks[i]=input.checked;persist();renderWorkout();renderWeek();renderStats();});
+      const copy=document.createElement('span');copy.className='task-copy';
+      const title=document.createElement('strong');title.textContent=task[0];
+      const small=document.createElement('small');small.textContent=`${task[1]} · ${task[2]}`;
+      copy.append(title,small);label.append(input,copy);list.appendChild(label);
+    });
+    const count=plan.tasks.filter((_,i)=>!!day.checks[i]).length, pct=Math.round(count/plan.tasks.length*100);
+    $('progressText').textContent=`${count} of ${plan.tasks.length} tasks`;
+    $('progressFill').style.width=pct+'%';$('progressBar').setAttribute('aria-valuenow',String(pct));
+    document.querySelectorAll('[data-habit]').forEach(input=>{input.checked=!!day.habits[input.dataset.habit];});
+  }
+  function renderStats(){
+    const selectedWeek=mondayOf(selectedDate);let complete=0;
+    for(let i=0;i<7;i++){const d=dateShift(selectedWeek,i),day=ensureDate(localDateKey(d)),p=getPlan(d);if(p.tasks.every((_,j)=>!!day.checks[j]))complete++;}
+    $('daysDone').textContent=`${complete}/7`;
+    const key=localDateKey(selectedDate),day=ensureDate(key),plan=getPlan(selectedDate);const count=plan.tasks.filter((_,i)=>!!day.checks[i]).length;
+    $('taskCount').textContent=`${Math.round(count/plan.tasks.length*100)}%`;
+    const start=fromKey(state.started);const diff=Math.floor((today-start)/86400000);const journey=Math.min(30,Math.max(1,diff+1));$('journeyDay').textContent=`Day ${journey}/30`;
+  }
+  function renderAll(){renderWeek();renderWorkout();renderStats();}
+  $('prevWeek').addEventListener('click',()=>{selectedDate=dateShift(selectedDate,-7);renderAll();});
+  $('nextWeek').addEventListener('click',()=>{selectedDate=dateShift(selectedDate,7);renderAll();});
+  $('goToday').addEventListener('click',()=>{selectedDate=new Date(today);renderAll();});
+  document.querySelectorAll('[data-habit]').forEach(input=>input.addEventListener('change',()=>{const day=ensureDate(localDateKey(selectedDate));day.habits[input.dataset.habit]=input.checked;persist();}));
+  $('resetDay').addEventListener('click',()=>{if(confirm('Clear the workout checkmarks and daily basics for this date?')){state.days[localDateKey(selectedDate)]={checks:{},habits:{}};persist();renderAll();}});
+  $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({app:'My Fitness Tracker',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='my-fitness-progress.json';a.click();URL.revokeObjectURL(url);});
+  let installPrompt=null;
+  const installBtn=$('installBtn');
+  window.addEventListener('beforeinstallprompt',(event)=>{event.preventDefault();installPrompt=event;installBtn.hidden=false;});
+  installBtn.addEventListener('click',async()=>{if(!installPrompt){alert('On iPhone, open this page in Safari and choose Share → Add to Home Screen. On Android, use the browser menu → Install app or Add to Home screen.');return;}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installBtn.hidden=true;});
+  if('serviceWorker' in navigator && location.protocol.startsWith('http')) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(err=>console.log('Offline setup unavailable:',err)));
+  renderAll();
+})();
+</script>
+</body>
+</html>
